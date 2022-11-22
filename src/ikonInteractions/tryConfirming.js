@@ -10,40 +10,37 @@ const tryConfirming = async (page, mountain, date, retries, useBuddyPass) => {
   } else {
     try {
       console.log("Confirming");
-      
+
       const saveBtnParent = (await saveBtn[0].$x(".."))[0];
       if (saveBtnParent) {
         if (useBuddyPass === "yes") {
           selectBuddyPass(page);
         }
-  
-        await saveBtnParent.click();
-        await delay(500);
       }
 
       const confirm = await page.$x(`//span[contains(., 'Continue to Confirm')]`);
       if (confirm) {
-          const confirmBtnParent = (await confirm[1].$x('..'))[0];
-          if (confirmBtnParent) {
-              await confirmBtnParent.click();
-              await delay(1000);
+        const confirmBtnParent = (await confirm[0].$x(".."))[0];
+        if (confirmBtnParent) {
+          await confirmBtnParent.click();
+          await delay(1000);
 
-              console.log('Review and Confirm');
-              const agreeInputLabel = await page.$('.amp-checkbox-input');
-              const agreeInputParent = (await agreeInputLabel.$x('..'))[0];
-              await agreeInputParent.click();
+          console.log("Review and Confirm");
+          const agreeInputLabel = await page.$(".amp-checkbox-input");
+          const agreeInputParent = (await agreeInputLabel.$x(".."))[0];
+          await agreeInputParent.click();
 
-              const confirmFinal = await page.$x(`//span[contains(., 'Confirm Reservations')]`);
-              const confirmFinalBtnParent = (await confirmFinal[0].$x('..'))[0];
-              await confirmFinalBtnParent.click();
+          const confirmFinal = await page.$x(`//span[contains(., 'Confirm Reservations')]`);
+          const confirmFinalBtnParent = (await confirmFinal[0].$x(".."))[0];
+          await confirmFinalBtnParent.click();
 
-              return true;
-          } else {
-              return false;
-          }
+          return true;
+        } else {
+          return false;
+        }
       }
     } catch (e) {
-      throw new Error("Error thrown confirming day");
+      throw new Error("Error thrown confirming day " + e);
     }
   }
 };
